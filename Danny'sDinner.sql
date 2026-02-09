@@ -27,3 +27,7 @@ select customer_id,product_name from finalTable where rnk=1;
 with intermediateTable as (select m.customer_id,s.product_id,s.order_date-m.join_date as ordering from members m join sales s on m.customer_id=s.customer_id where s.order_date<m.join_date order by ordering desc),
 finalTable as (select customer_id,i.product_id,product_name,ordering,dense_rank() over (partition by customer_id order by ordering desc) as rnk from intermediateTable i join menu m on i.product_id=m.product_id)
 select customer_id,product_name from finalTable where rnk=1;
+
+-- 8. What is the total items and amount spent for each member before they became a member?
+ with intermediateTable as (select m.customer_id,s.product_id,s.order_date-m.join_date as ordering_before_membership from members m join sales s on m.customer_id=s.customer_id where s.order_date<m.join_date)
+select customer_id,sum(m.price) as total_spent_amount,count(*) as total_items from intermediateTable i join menu m on i.product_id=m.product_id group by i.customer_id order by customer_id asc;
