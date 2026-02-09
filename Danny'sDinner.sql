@@ -18,3 +18,8 @@ with intermediateTable as(select customer_id,product_id,count(*) as cnt from sal
 finalTable as(select customer_id,product_id,cnt,dense_rank() over (partition by customer_id order by cnt desc)as rnk from intermediateTable)
 select f.customer_id,product_name,cnt from finalTable f join menu m on f.product_id=m.product_id where rnk=1;
 
+-- 6. Which item was purchased first by the customer after they became a member?
+with intermediateTable as (select m.customer_id,s.product_id,s.order_date-m.join_date as ordering from members m join sales s on m.customer_id=s.customer_id where s.order_date>m.join_date order by ordering asc),
+finalTable as (select customer_id,i.product_id,product_name,dense_rank() over (partition by customer_id order by ordering asc) as rnk from intermediateTable i join menu m on i.product_id=m.product_id)
+select customer_id,product_name from finalTable where rnk=1;
+
