@@ -42,4 +42,8 @@ join menu me on me.product_id=s.product_id group by s.customer_id;
 
 --Bonus Question 1
 select s.customer_id,s.order_date,m.product_name,m.price,(case when s.order_date-member.join_date>=0 then 'Y' else 'N' end)as member from sales s join menu m on s.product_id=m.product_id left join members member on s.customer_id=member.customer_id order by member.customer_id,s.order_date;
+
 --Bonus Question 2
+with intermediateTable as (select s.customer_id,s.order_date,m.product_name,m.price,(case when s.order_date-member.join_date>=0 then 'Y' else 'N' end)as member
+from sales s join menu m on s.product_id=m.product_id left join members member on s.customer_id=member.customer_id order by member.customer_id,s.order_date)
+select i.*,(case when member='N' then NULL else dense_rank() over (partition by customer_id order by case when member='Y' then order_date end) end) as ranking from intermediateTable i order by customer_id,order_date;
