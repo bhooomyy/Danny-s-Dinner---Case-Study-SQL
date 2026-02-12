@@ -42,6 +42,15 @@ Each row represents a pizza in a customer order. The table includes pizza type, 
 | 3        | 102        | 1        |            |        | 2021-01-02 23:51:23 |
 | 3        | 102        | 2        |            | NaN    | 2021-01-02 23:51:23 |
 | 4        | 103        | 1        | 4          |        | 2021-01-04 13:23:46 |
+| 4        | 103        | 1        | 4          |        | 2021-01-04 13:23:46 |
+| 4        | 103        | 2        | 4          |        | 2021-01-04 13:23:46 |
+| 5        | 104        | 1        | null       | 1      | 2021-01-08 21:00:29 |
+| 6        | 101        | 2        | null       | null   | 2021-01-08 21:03:13 |
+| 7        | 105        | 2        | null       | 1      | 2021-01-08 21:20:29 |
+| 8        | 102        | 1        | null       | null   | 2021-01-09 23:54:33 |
+| 9        | 103        | 1        | 4          | 1, 5   | 2021-01-10 11:22:59 |
+| 10       | 104        | 1        | null       | null   | 2021-01-11 18:34:49 |
+| 10       | 104        | 1        | 2, 6       | 1, 4   | 2021-01-11 18:34:49 |
 
 *(Note: This table continues with other orders in the dataset.)*
 
@@ -123,3 +132,4 @@ Maps topping IDs to their names.
 8. **Count pizzas where both `exclusions` and `extras` are not empty.
 9. **Aggregate pizza counts by the hour extracted from `order_time`.
 10. **Aggregate pizza counts by the day of the week extracted from `order_time`.
+
