@@ -44,3 +44,6 @@ where r.distance!='' group by c.customer_id order by c.customer_id;
 
 --How many pizzas were delivered that had both exclusions and extras?
 select count(pizza_id) as delivered_pizza_with_exlusions_extras from customer_orders c join runner_orders r on c.order_id=r.order_id where exclusions<> '' and extras<> '' and duration<> ''; 
+
+--What was the total volume of pizzas ordered for each hour of the day?
+select extract(hour from order_time) as hour_of_day,count(order_id) as cnt_pizza from customer_orders group by extract(hour from order_time) order by hour_of_day asc;
