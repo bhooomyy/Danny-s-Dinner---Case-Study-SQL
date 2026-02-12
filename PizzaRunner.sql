@@ -50,3 +50,9 @@ select extract(hour from order_time) as hour_of_day,count(order_id) as cnt_pizza
 
 --What was the volume of orders for each day of the week?
 select TO_CHAR(order_time, 'Day') as day_of_week,count(order_id) as cnt_pizza from customer_orders group by TO_CHAR(order_time, 'Day') order by cnt_pizza desc;
+
+
+
+--Queries 2
+--How many runners signed up for each 1 week period? (i.e. week starts 2021-01-01)
+select extract(week from registration_date) as registration_week,count(runner_id) as cnt_runner from runners group by extract(week from registration_date) order by registration_week;
