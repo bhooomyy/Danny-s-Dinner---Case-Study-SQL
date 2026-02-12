@@ -41,3 +41,6 @@ sum(case when c.exclusions<>'' or c.extras<>'' then 1 else 0 end) as atleast_one
 sum(case when c.exclusions='' and c.extras='' then 1 else 0 end) as no_change 
 from customer_orders c join runner_orders r on c.order_id=r.order_id 
 where r.distance!='' group by c.customer_id order by c.customer_id;
+
+--How many pizzas were delivered that had both exclusions and extras?
+select count(pizza_id) as delivered_pizza_with_exlusions_extras from customer_orders c join runner_orders r on c.order_id=r.order_id where exclusions<> '' and extras<> '' and duration<> ''; 
