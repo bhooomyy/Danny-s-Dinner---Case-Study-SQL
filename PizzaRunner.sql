@@ -13,3 +13,8 @@ duration=(case when duration like 'null' then ' ' else replace(replace(replace(d
 cancellation=(case when cancellation is null or cancellation like 'null' then ' ' else cancellation end);
 
 select * from runner_orders;
+
+-- Queries
+--How many pizzas were ordered?
+select count(*) from customer_orders;
+
