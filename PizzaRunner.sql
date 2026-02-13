@@ -107,3 +107,11 @@ from runner_orders r join customer_orders c on r.order_id=c.order_id
 where pickup_time is not NULL and pickup_time <>'' and pickup_time<>' '
 group by r.runner_id,r.pickup_time,c.order_time,r.order_id
 order by r.runner_id,r.order_id;
+
+--What is the successful delivery percentage for each runner?
+select 
+runner_id, 
+round(100 * sum(case when distance is null then 0 else 1 end) / count(*), 0) as success_perc
+from runner_orders
+group by runner_id
+order by runner_id;
