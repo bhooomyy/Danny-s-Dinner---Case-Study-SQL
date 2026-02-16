@@ -235,3 +235,41 @@ join pizza_toppings pt
 group by ct.order_id, ct.pizza_id
 order by ct.order_id;
 
+
+--What is the total quantity of each ingredient used in all delivered pizzas sorted by most frequent first?
+-- list of toppings actually used in orders
+with base as (
+    select c.order_id,
+           prn.toppings as topping_id
+    from customer_orders_normalized c
+    join pizza_recipes_normalized prn
+      on c.pizza_id = prn.pizza_id
+),
+
+filtered_base as (
+    -- Remove excluded toppings
+    select b.*
+    from base b
+    left join order_exclusions oe
+      on b.order_id = oe.order_id
+     and b.topping_id = oe.exclusions
+    where oe.exclusions is null
+),
+
+all_toppings as (
+    -- Add extras
+    select topping_id
+    from filtered_base
+    union all
+    select ox.extras as topping_id
+    from order_extras ox
+)
+
+-- Count total quantity of each topping
+select pt.topping_name,
+       count(*) as total_quantity
+from all_toppings at
+join pizza_toppings pt
+  on at.topping_id = pt.topping_id
+group by pt.topping_name
+order by total_quantity desc;
