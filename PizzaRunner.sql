@@ -14,7 +14,13 @@ cancellation=(case when cancellation is null or cancellation like 'null' then ''
 
 select * from runner_orders;
 
--- Queries
+
+
+
+
+
+
+-- Queries [Pizza Matrics]
 --How many pizzas were ordered?
 select count(*) from customer_orders;
 
@@ -53,7 +59,13 @@ select TO_CHAR(order_time, 'Day') as day_of_week,count(order_id) as cnt_pizza fr
 
 
 
---Queries 2
+
+
+
+
+
+
+--Queries 2 [Runner and customer experience]
 --How many runners signed up for each 1 week period? (i.e. week starts 2021-01-01)
 select extract(week from registration_date) as registration_week,count(runner_id) as cnt_runner from runners group by extract(week from registration_date) order by registration_week;
 
@@ -116,7 +128,14 @@ from runner_orders
 group by runner_id
 order by runner_id;
 
--- Queries 3
+
+
+
+
+
+
+
+-- Queries 3 [Ingradiants Optimizarion]
 --What are the standard ingredients for each pizza?
 create table pizza_recipes_normalized(
 "pizza_id" INT,
@@ -273,3 +292,25 @@ join pizza_toppings pt
   on at.topping_id = pt.topping_id
 group by pt.topping_name
 order by total_quantity desc;
+
+
+
+
+
+
+
+
+-- Queires 4 [Pricing and Ratings]
+--If a Meat Lovers pizza costs $12 and Vegetarian costs $10 and there were no charges for changes - how much money has Pizza Runner made so far if there are no delivery fees?
+select 
+sum(case when pizza_id=1 then 12 else 10 end) as total_earned_money 
+from runner_orders r join customer_orders c on r.order_id=c.order_id 
+where distance is not null;
+
+select 
+runner_id,
+count(runner_id) as completed_orders, 
+sum(case when pizza_id=1 then 12 else 10 end) as total_earned_money 
+from runner_orders r join customer_orders c on r.order_id=c.order_id 
+where distance is not null  
+group by runner_id;
