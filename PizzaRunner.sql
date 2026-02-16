@@ -326,3 +326,40 @@ sum(case when pizza_id=1 and extras <> '' then 13
 from runner_orders r join customer_orders c on r.order_id=c.order_id 
 where distance is not null;
 
+
+--The Pizza Runner team now wants to add an additional ratings system that allows customers to rate their runner, how would you design an additional table for this new dataset - generate a schema for this new table and insert your own data for ratings for each successful customer order between 1 to 5.
+create table ratings (
+order_id integer,
+rating integer);
+
+insert into ratings
+(order_id, rating)
+values(1,3),(2,5),(3,3),(4,1),(5,5),(7,3),(8,4),(10,3);
+
+
+/*Using your newly generated table - can you join all of the information together to form a table which has the following information for successful deliveries?
+customer_id
+order_id
+runner_id
+rating
+order_time
+pickup_time
+Time between order and pickup
+Delivery duration
+Average speed
+Total number of pizzas*/
+select 
+c.customer_id,
+r.order_id, 
+r.runner_id,
+rate.rating,
+c.order_time, 
+r.pickup_time, 
+(pickup_time::timestamp - order_time::timestamp) as timebetween_order_and_pickup,duration,
+avg(distance/duration) as average_speed, 
+count(*) as total_pizzas 
+from runner_orders r join customer_orders c on r.order_id=c.order_id 
+join ratings rate on r.order_id=rate.order_id
+where r.distance is not null and r.pickup_time is not null 
+group by c.customer_id, r.order_id, r.runner_id, rate.rating, c.order_time, r.pickup_time, r.distance, r.duration
+order by r.order_id;
