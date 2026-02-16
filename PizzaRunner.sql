@@ -314,3 +314,15 @@ sum(case when pizza_id=1 then 12 else 10 end) as total_earned_money
 from runner_orders r join customer_orders c on r.order_id=c.order_id 
 where distance is not null  
 group by runner_id;
+
+
+--What if there was an additional $1 charge for any pizza extras?
+	--Add cheese is $1 extra
+select 
+sum(case when pizza_id=1 and extras <> '' then 13 
+    when pizza_id=1 then 12 
+    when pizza_id=2 and extras <> '' then 11 
+    else 10 end) as total_earned_money 
+from runner_orders r join customer_orders c on r.order_id=c.order_id 
+where distance is not null;
+
