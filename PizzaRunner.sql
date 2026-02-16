@@ -363,3 +363,21 @@ join ratings rate on r.order_id=rate.order_id
 where r.distance is not null and r.pickup_time is not null 
 group by c.customer_id, r.order_id, r.runner_id, rate.rating, c.order_time, r.pickup_time, r.distance, r.duration
 order by r.order_id;
+
+
+ --If a Meat Lovers pizza was $12 and Vegetarian $10 fixed prices with no cost for extras and each runner is paid $0.30 per kilometre traveled - how much money does Pizza Runner have left over after these deliveries?
+with total_earned_money as (
+select 
+sum(case when pizza_id=1 then 12 else 10 end) as total_earned_money 
+from runner_orders r join customer_orders c on r.order_id=c.order_id 
+where distance is not null),
+  
+travel_cost as (
+  select 
+  sum(cast(distance as float)*0.30) as total_travel_cost 
+  from runner_orders)
+  
+select 
+    te.total_earned_money - tc.total_travel_cost as money_left
+from total_earned_money te
+cross join travel_cost tc;
