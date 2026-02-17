@@ -87,3 +87,11 @@ from active_plan
 where rnk=1 
 group by plan_name
 order by cnt_customers desc;
+
+--8. How many customers have upgraded to an annual plan in 2020?
+select 
+count(*) 
+from subscriptions 
+where plan_id=3 and extract(year from start_date)=2020;
+
+
