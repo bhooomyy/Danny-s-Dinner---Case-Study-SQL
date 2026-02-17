@@ -51,3 +51,22 @@ select
 count(distinct customer_id) as churn_after_trial,
 round((100.0*count(distinct customer_id))/(select count(distinct customer_id) from subscriptions)) as churn_percentage 
 from trial_to_churn;
+
+
+--6. What is the number and percentage of customer plans after their initial free trial?
+with next_plan as(
+select 
+customer_id,
+plan_id,
+start_date,
+lead(plan_id) over (partition by customer_id order by start_date) as next_plan_id
+from subscriptions )
+
+select 
+next_plan_id,
+count(customer_id) as converted_subscribers,
+round(((100.0*count(customer_id)::numeric)/(select count(distinct customer_id) from subscriptions)),2)::text||'%' as percentage_converted_subscribers 
+from next_plan 
+where next_plan_id is not null and plan_id=0 
+group by next_plan_id 
+order by next_plan_id;
