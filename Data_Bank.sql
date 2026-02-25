@@ -86,3 +86,24 @@ select
 round(avg(total_cnt)) as avg_total_cnt,
 round(avg(total_amt)) as avg_total_amt 
 from table1;
+
+-- 3. For each month - how many Data Bank customers make more than 1 deposit and either 1 purchase or 1 withdrawal in a single month?
+with monthly_transactions as (
+  select 
+    customer_id, 
+    extract(month from txn_date) as mth,
+    sum(case when txn_type = 'deposit' then 0 else 1 end) as deposit_count,
+    sum(case when txn_type = 'purchase' then 0 else 1 end) as purchase_count,
+    sum(case when txn_type = 'withdrawal' then 1 else 0 end) as withdrawal_count
+  from customer_transactions
+  group by customer_id, extract(month from txn_date)
+)
+
+select
+  mth,
+  count(distinct customer_id) as customer_count
+from monthly_transactions
+where deposit_count > 1 
+  and (purchase_count >= 1 or withdrawal_count >= 1)
+group by mth
+order by mth;
