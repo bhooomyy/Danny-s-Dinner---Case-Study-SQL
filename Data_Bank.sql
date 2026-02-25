@@ -1,3 +1,4 @@
+-- Customer Nodes Exploration
 --1. How many unique nodes are there on the Data Bank system?
 select 
 count(distinct node_id) 
@@ -62,3 +63,13 @@ select
 from base
 group by region_name
 order by region_name;
+
+
+-- Customer Transactions
+-- 1. What is the unique count and total amount for each transaction type?
+select 
+txn_type,
+count(*) transaction_cnt ,
+sum(txn_amount) as total_amt 
+from customer_transactions 
+group by txn_type;
