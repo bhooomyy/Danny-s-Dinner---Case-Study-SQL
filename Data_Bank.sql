@@ -107,3 +107,8 @@ where deposit_count > 1
   and (purchase_count >= 1 or withdrawal_count >= 1)
 group by mth
 order by mth;
+
+-- 4. What is the closing balance for each customer at the end of the month?
+
+
+-- 5. What is the percentage of customers who increase their closing balance by more than 5%?
