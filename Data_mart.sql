@@ -30,6 +30,18 @@ add column cal_year integer;
 
 update weekly_sales
 set cal_year=extract(year from week_date);
+
+
 -- Add a new column called age_band after the original segment column using the following mapping on the number inside the segment value
 alter table weekly_sales
 add column age_band varchar(12);
+
+update weekly_sales
+set age_band=(case when segment like 'null' then null 
+else substring(segment from 2 for 1) end);
+
+update weekly_sales
+set age_band=(case when age_band='1' then 'Young Adults'
+when age_band='2' then 'Middle Aged'
+when age_band='3' or age_band='4' then 'Retirees' 
+else 'unknown' end);
