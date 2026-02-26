@@ -58,3 +58,11 @@ update weekly_sales
 set demographic=(case when demographic='C' then 'Couples'
                 when demographic='F' then 'Families' else 'unknown' end);
   
+
+  -- Generate a new avg_transaction column as the sales value divided by transactions rounded to 2 decimal places for each record
+alter table weekly_sales
+add column avg_transaction float;
+
+update weekly_sales
+set avg_transaction=(case when transactions = 0 then null
+        else round(sales::numeric / transactions, 2) end);
