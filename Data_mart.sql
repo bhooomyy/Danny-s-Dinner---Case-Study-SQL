@@ -74,3 +74,12 @@ set avg_transaction=(case when transactions = 0 then null
 -- 1.What day of the week is used for each week_date value?
 select week_date, extract(day from week_date) from weekly_sales;
 
+-- 2.What range of week numbers are missing from the dataset?
+with all_weeks as(select 
+                  generate_series(1,52) as week_number)
+select 
+w.week_number 
+from all_weeks w 
+left join (select distinct week_number from weekly_sales order by 1 asc)t 
+on w.week_number=t.week_number 
+where t.week_number is null; 
