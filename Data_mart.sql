@@ -86,3 +86,6 @@ where t.week_number is null;
 
 -- 3.How many total transactions were there for each year in the dataset?
 select cal_year,sum(transactions) from weekly_sales group by cal_year;
+
+-- 4.What is the total sales for each region for each month?
+select region,month_number,cal_year,sum(sales) as total_sales from weekly_sales group by region,month_number,cal_year order by 4 desc ;
