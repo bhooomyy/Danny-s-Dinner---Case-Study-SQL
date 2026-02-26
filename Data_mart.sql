@@ -89,3 +89,6 @@ select cal_year,sum(transactions) from weekly_sales group by cal_year;
 
 -- 4.What is the total sales for each region for each month?
 select region,month_number,cal_year,sum(sales) as total_sales from weekly_sales group by region,month_number,cal_year order by 4 desc ;
+
+-- 5.What is the total count of transactions for each platform?
+select platform,sum(transactions) as total_transactions_per_platform from weekly_sales group by platform;
